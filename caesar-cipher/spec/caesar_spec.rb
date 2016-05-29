@@ -2,19 +2,35 @@ require "spec_helper"
 require_relative "../lib/caesar"
 
 RSpec.describe Caesar do
-  it "encrypts a single letter" do
-    expect(Caesar.encrypt("A")).to eq("D")
+  context "with default key" do
+    let(:caesar) { Caesar.new }
+
+    it "encrypts a single letter" do
+      expect(caesar.encrypt("A")).to eq("D")
+    end
+
+    it "encrypts a composed message" do
+      expect(caesar.encrypt("AM")).to eq("DP")
+    end
+
+    it "encrypts a message with spaces" do
+      expect(caesar.encrypt("I AM")).to eq("L DP")
+    end
   end
 
-  it "encrypts a composed message" do
-    expect(Caesar.encrypt("AM")).to eq("DP")
+  context "with a custom key" do
+    let(:caesar) { Caesar.new(19) }
+
+    it "encrypts with a different shift factor" do
+      expect(caesar.encrypt("A BAT")).to eq("T UTM")
+    end
   end
 
-  it "encrypts messages with spaces" do
-    expect(Caesar.encrypt("I AM")).to eq("L DP")
-  end
+  context "with a custom alphabet" do
+    let(:caesar) { Caesar.new(2, "JKLMNOPQRST") }
 
-  it "accepts the key as an argument" do
-    expect(Caesar.encrypt("A BAT", 19)).to eq("T UTM")
+    it "encrypts with the custom alphabet" do
+      expect(caesar.encrypt("JK")).to eq("LM")
+    end
   end
 end
