@@ -7,13 +7,23 @@ class Caesar
   end
 
   def encrypt(message = "")
+    translate(message, @alphabet, shifted_alphabet)
+  end
+
+  def decrypt(message = "")
+    translate(message, shifted_alphabet, @alphabet)
+  end
+
+  private
+
+  def translate(message, from, to)
     result = ""
     message.each_char do |char|
       result << begin
         if char == " "
           " "
         else
-          shifted_alphabet[@alphabet.index(char)]
+          to[from.index(char)]
         end
       end
     end
@@ -21,10 +31,7 @@ class Caesar
     result
   end
 
-  private
-
   def shifted_alphabet
     @shifted_alphabet ||= @alphabet[@key, @alphabet.size] + @alphabet[0, @key]
   end
-
 end
